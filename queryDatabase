@@ -1,0 +1,54 @@
+
+IF EXISTS (SELECT name FROM sys.databases WHERE name = 'PersonDatabase')
+BEGIN
+    DROP DATABASE PersonDatabase;
+END
+GO
+
+
+
+CREATE DATABASE PersonDatabase;
+GO
+
+
+ALTER AUTHORIZATION ON DATABASE::PersonDatabase TO sa;
+GO
+
+-- استفاده از پایگاه داده جدید
+USE PersonDatabase;
+GO
+
+
+IF OBJECT_ID('dbo.Persons', 'U') IS NOT NULL
+BEGIN
+    DROP TABLE Persons;
+END
+GO
+
+
+CREATE TABLE Persons
+(
+    Id INT PRIMARY KEY,         
+    FirstName NVARCHAR(50),    
+    LastName NVARCHAR(50)      
+);
+GO
+
+
+IF OBJECT_ID('dbo.InsertPerson', 'P') IS NOT NULL
+BEGIN
+    DROP PROCEDURE InsertPerson;
+END
+GO
+
+
+CREATE PROCEDURE InsertPerson
+    @Id INT,
+    @FirstName NVARCHAR(50),
+    @LastName NVARCHAR(50)
+AS
+BEGIN
+    INSERT INTO Persons (Id, FirstName, LastName)
+    VALUES (@Id, @FirstName, @LastName);
+END;
+GO
